@@ -5,14 +5,14 @@ const ListTodo = () => {
 	const [todos, setTodos] = React.useState([]);
 
 	const deleteTodo = async id => {
-		await fetch(`http://localhost:5000/todos/${id}`, {
+		await fetch(`/todos/${id}`, {
 			method: 'DELETE',
 		});
 		setTodos(todos.filter(todo => todo.todo_id !== id));
 	};
 
 	const getTodos = async () => {
-		const response = await fetch('http://localhost:5000/todos');
+		const response = await fetch('/todos');
 		const data = await response.json();
 		setTodos(data);
 	};
@@ -36,7 +36,7 @@ const ListTodo = () => {
 						<tr key={todo.todo_id}>
 							<td>{todo.description}</td>
 							<td>
-								<EditTodo todo={todo}/>
+								<EditTodo todo={todo} />
 							</td>
 							<td>
 								<button
