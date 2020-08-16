@@ -9,7 +9,6 @@
 	},
 	"scripts": {
 		"client": "cd client && npm start",
-		"build": "cd client && npm run build",
 		"server": "nodemon server",
 		"dev": "concurrently --kill-others-on-fail \"npm run client\" \"npm run server\"",
 		"start": "node index.js",
