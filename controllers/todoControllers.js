@@ -1,20 +1,6 @@
-const express = require('express');
-const cors = require('cors');
-const morgan = require('morgan');
-const app = express();
-const pool = require('./dbConnection');
+const pool = require('../dbConnection');
 
-// * MIDDLEWARES //
-
-app.use(morgan('dev'));
-app.use(cors());
-app.use(express.json());
-
-// * ROUTES //
-
-// TODO: create a todo //
-
-app.post('/todos', async (req, res) => {
+const add_todo = async (req, res) => {
 	try {
 		const { description } = req.body;
 		const newTodo = await pool.query(
@@ -25,22 +11,18 @@ app.post('/todos', async (req, res) => {
 	} catch (err) {
 		console.error(err.message);
 	}
-});
+};
 
-// TODO: get all todos //
-
-app.get('/todos', async (req, res) => {
+const get_todos = async (req, res) => {
 	try {
 		const allTodos = await pool.query('SELECT * FROM todos');
 		res.json(allTodos.rows);
 	} catch (err) {
 		console.error(err.message);
 	}
-});
+};
 
-// TODO: get a todo //
-
-app.get('/todos/:id', async (req, res) => {
+const get_todo = async (req, res) => {
 	try {
 		const { id } = req.params;
 		const todo = await pool.query('SELECT * FROM todos WHERE todo_id = $1', [
@@ -50,11 +32,9 @@ app.get('/todos/:id', async (req, res) => {
 	} catch (err) {
 		console.error(err.message);
 	}
-});
+};
 
-// TODO: update a todo //
-
-app.put('/todos/:id', async (req, res) => {
+const update_todo = async (req, res) => {
 	try {
 		const { id } = req.params;
 		const { description } = req.body;
@@ -67,24 +47,26 @@ app.put('/todos/:id', async (req, res) => {
 	} catch (err) {
 		console.error(err.message);
 	}
-});
+};
 
-// TODO: delete a todo //
-
-app.delete('/todos/:id', async (req, res) => {
+const delete_todo = async (req, res) => {
 	try {
 		const { id } = req.params;
-		const deleteTodo = await pool.query('DELETE FROM todos WHERE todo_id = $1', [
-			id,
-		]);
+		const deleteTodo = await pool.query(
+			'DELETE FROM todos WHERE todo_id = $1',
+			[id]
+		);
 
 		res.json('Todo was deleted!');
 	} catch (err) {
 		console.error(err.message);
 	}
-});
+};
 
-// * START SERVER //
-app.listen(5000, () => {
-	console.log('Server running at port 5000');
-});
+module.exports = {
+	add_todo,
+	get_todos,
+	get_todo,
+	update_todo,
+	delete_todo,
+};
